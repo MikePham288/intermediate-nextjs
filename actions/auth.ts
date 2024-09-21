@@ -27,3 +27,20 @@ export const registerUser = async (previousState, formData: FormData) => {
 
   redirect('/dashboard')
 }
+
+export const signinUser = async (previousState, formData: FormData) => {
+  const data = authSchema.parse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+
+  try {
+    const { token } = await signin(data)
+    cookies().set(COOKIE_NAME, token)
+  } catch (error) {
+    console.log(error)
+    return { message: 'Failed to sign you in' }
+  }
+
+  redirect('/dashboard')
+}
